@@ -2,7 +2,6 @@ require 'sinatra'
 require 'json'
 require 'securerandom'
 require 'mongo'
-require 'sinatra/reloader'
 
 require './master.rb'
 
