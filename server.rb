@@ -40,6 +40,10 @@ post('/guess') do
   game_key = params['game_key']
   game = coll.find({ 'game_key' => game_key }).first()
 
+  if game[:solved]
+    return { :user => game['user'], :game_key => game_key, :num_guesses => game['num_guesses'], :past_guesses => game['past_guesses'], :past_results => game['past_results'], :result => "This game has already been solved." }.to_json
+  end
+
   past_guesses = game['past_guesses'] << player_guess
   num_guesses = game['num_guesses'] + 1
   answer_code = game['answer_code']
@@ -50,6 +54,7 @@ post('/guess') do
   past_results = game['past_results'] << result
 
   if game_object.win?(player_guess)
+    coll.update({ 'game_key' => game_key }, {:user => game['user'], :game_key => game_key, :answer_code => answer_code, :num_guesses => num_guesses, :past_guesses => past_guesses, :past_results => past_results, :solved => true })
     return { :user => game['user'], :game_key => game_key, :num_guesses => num_guesses, :past_guesses => past_guesses, :past_results => past_results, :guess => player_guess, :result => "You win!" }.to_json
   end
 

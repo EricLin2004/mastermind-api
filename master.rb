@@ -1,4 +1,13 @@
 class Code
+  COLOR_DICT = {
+    0 => 'R',
+    1 => 'B',
+    2 => 'G',
+    3 => 'Y',
+    4 => 'P',
+    5 => 'O'
+  }
+
   def initialize(answer_code="RBGY")
     @answer_code = answer_code
   end
@@ -6,7 +15,7 @@ class Code
   def self.random
     colors = []
     4.times do
-      colors << ['R','B','G','Y'].sample
+      colors << ['R','B','G','Y','P','O'].sample
     end
     # for i in 0..3
     #   colors << ['R','B','G','Y'].sample
@@ -15,8 +24,8 @@ class Code
   end
 
   def self.sanitize(code)
-    if code.scan(/[rgbyRGBY]+/).join('').length == 4
-      return code.scan(/[rgbyRGBY]+/).join('').upcase
+    if code.scan(/[012345rgbypoRGBYPO]+/).join('').length == 4
+      return code.scan(/[012345rgbypoRGBY]+/).join('').upcase
     end
     false
   end
