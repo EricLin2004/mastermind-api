@@ -9,7 +9,7 @@ include Mongo
 
 conn = MongoClient.new
 db = conn['eric-mastermind']
-coll = db['games']
+collection = db['games']
 
 post('/new_game') do
   content_type :json
@@ -18,11 +18,25 @@ post('/new_game') do
   new_code = Game.new.answer.code
 
   unless params['user']
-    return { :error => "Please provide a user parameter in your post request"}
+    return { :error => "Please provide a user parameter in your post request" }
   end
 
-  coll.insert({ :user => params[:user], :game_key => new_game_key, :num_guesses => 0, :answer_code => new_code, :past_guesses => [], :past_results => [] })
-  { :game_key => new_game_key, :num_guesses => 0, :past_guesses => [], :past_results => [] }.to_json
+  collection.insert({
+    :user => params[:user],
+    :game_key => new_game_key,
+    :num_guesses => 0,
+    :answer_code => new_code,
+    :start_time => Time.now,
+    :past_guesses => [],
+    :past_results => []
+  })
+
+  return {
+    :game_key => new_game_key,
+    :num_guesses => 0,
+    :past_guesses => [],
+    :past_results => []
+  }.to_json
 end
 
 post('/guess') do
@@ -38,10 +52,19 @@ post('/guess') do
   end
 
   game_key = params['game_key']
-  game = coll.find({ 'game_key' => game_key }).first()
+  game = collection.find({ 'game_key' => game_key }).first()
 
-  if game[:solved]
-    return { :user => game['user'], :game_key => game_key, :num_guesses => game['num_guesses'], :past_guesses => game['past_guesses'], :past_results => game['past_results'], :result => "This game has already been solved." }.to_json
+  if game[:solved] == 'true'
+    return {
+      :user => game['user'],
+      :game_key => game_key,
+      :num_guesses => game['num_guesses'],
+      :past_guesses => game['past_guesses'],
+      :past_results => game['past_results'],
+      :start_time => game['start_time'],
+      :end_time => game['end_time'],
+      :result => "This game has already been solved."
+    }.to_json
   end
 
   past_guesses = game['past_guesses'] << player_guess
@@ -54,10 +77,45 @@ post('/guess') do
   past_results = game['past_results'] << result
 
   if game_object.win?(player_guess)
-    coll.update({ 'game_key' => game_key }, {:user => game['user'], :game_key => game_key, :answer_code => answer_code, :num_guesses => num_guesses, :past_guesses => past_guesses, :past_results => past_results, :solved => true })
-    return { :user => game['user'], :game_key => game_key, :num_guesses => num_guesses, :past_guesses => past_guesses, :past_results => past_results, :guess => player_guess, :result => "You win!" }.to_json
+    collection.update({ 'game_key' => game_key }, {
+      :user => game['user'],
+      :game_key => game_key,
+      :answer_code => answer_code,
+      :num_guesses => num_guesses,
+      :past_guesses => past_guesses,
+      :past_results => past_results,
+      :start_time => game['start_time'],
+      :end_time => Time.now,
+      :solved => 'true'
+    })
+
+    return {
+      :user => game['user'],
+      :game_key => game_key,
+      :num_guesses => num_guesses,
+      :past_guesses => past_guesses,
+      :past_results => past_results,
+      :guess => player_guess,
+      :result => "You win!"
+    }.to_json
   end
 
-  coll.update({ 'game_key' => game_key }, {:user => game['user'], :game_key => game_key, :answer_code => answer_code, :num_guesses => num_guesses, :past_guesses => past_guesses, :past_results => past_results })
-  { :game_key => game_key, :num_guesses => num_guesses, :past_guesses => past_guesses, :past_results => past_results, :guess => player_guess, :result => ["You got #{result[0]} exact!","You got #{result[1]} near!"] }.to_json
+  collection.update({'game_key' => game_key }, {
+    :user => game['user'],
+    :game_key => game_key,
+    :answer_code => answer_code,
+    :num_guesses => num_guesses,
+    :past_guesses => past_guesses,
+    :start_time => game['start_time'],
+    :past_results => past_results
+  })
+
+  return {
+    :game_key => game_key,
+    :num_guesses => num_guesses,
+    :past_guesses => past_guesses,
+    :past_results => past_results,
+    :guess => player_guess,
+    :result => ["You got #{result[0]} exact!","You got #{result[1]} near!"]
+  }.to_json
 end
