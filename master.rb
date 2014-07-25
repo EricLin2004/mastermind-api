@@ -16,7 +16,7 @@ class Code
 
   def self.sanitize(code)
     if code.scan(/[rgbyRGBY]+/).join('').length == 4
-      return code.scan(/[rgbyRGBY]+/).join('').capitalize
+      return code.scan(/[rgbyRGBY]+/).join('').upcase
     end
     false
   end
