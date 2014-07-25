@@ -41,6 +41,7 @@ end
 
 post('/guess') do
   content_type :json
+
   unless params['game_key']
     return { :error => "Could not find game key. Please post with proper key!" }.to_json
   end
@@ -48,13 +49,16 @@ post('/guess') do
   player_guess = Code.sanitize(params['code'])
 
   unless params['code'] && player_guess
-    return { :error => "Invalid code submission. Please post with code consisting of 4 letters: RBGY" }.to_json
+    return { :error => "Invalid code submission. Please post with code parameter consisting of 4 letters of RBGYOP" }.to_json
   end
 
   game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
 
-  if game[:solved] == 'true'
+  p game
+  p game[:solved]
+
+  if game[:solved] == true
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -100,7 +104,7 @@ post('/guess') do
     }.to_json
   end
 
-  collection.update({'game_key' => game_key }, {
+  collection.update({ 'game_key' => game_key }, {
     :user => game['user'],
     :game_key => game_key,
     :answer_code => answer_code,
