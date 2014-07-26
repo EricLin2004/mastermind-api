@@ -5,6 +5,8 @@ The rules of Mastermind: http://en.wikipedia.org/wiki/Mastermind_(board_game)
 
 This API is currently deployed on heroku: http://eric-mastermind.herokuapp.com/
 
+The goal of this is to write an algorithm to get to the solution while interacting with the API. If this challenge is difficult (but not too difficult) we can post this on our AxiomZen website for people to try out. Difficulty can be raised by increasing number of colors to choose from (currently 6 colors) or increasing number of spots to fill (currently set to 4)
+
 There are only two endpoints for this api:
 
 =========================
