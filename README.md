@@ -86,7 +86,7 @@ Once you guess the correct code you will receive the time it took for you to com
         ]
     ],
     "guess": "GGYO",
-    "time_taken": 254.448826034,,
+    "time_taken": 254.448826034,
     "result": "You win!"
 }
 ```
