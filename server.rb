@@ -18,7 +18,7 @@ post('/new_game') do
   new_code = Game.new.answer.code
 
   unless params['user']
-    return { :error => "Please provide a user parameter in your post request" }
+    return { :error => "Please provide a user parameter in your post request" }.to_json
   end
 
   collection.insert({
