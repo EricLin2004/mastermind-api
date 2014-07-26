@@ -79,6 +79,9 @@ post('/guess') do
   past_results = game['past_results'] << result
 
   if game_object.win?(player_guess)
+    time_taken = Time.now - game['start_time']
+
+    puts time_taken
     collection.update({ 'game_key' => game_key }, {
       :user => game['user'],
       :game_key => game_key,
@@ -88,7 +91,7 @@ post('/guess') do
       :past_results => past_results,
       :start_time => game['start_time'],
       :end_time => Time.now,
-      :time_taken => game['start_time'] - Time.now,
+      :time_taken => time_taken,
       :solved => 'true'
     })
 
