@@ -55,7 +55,7 @@ post('/guess') do
   game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
 
-  if game['solved'] == true
+  if game['solved'] == 'true'
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -64,6 +64,7 @@ post('/guess') do
       :past_results => game['past_results'],
       :start_time => game['start_time'],
       :end_time => game['end_time'],
+      :time_taken => game['time_taken'],
       :result => "This game has already been solved."
     }.to_json
   end
@@ -87,6 +88,7 @@ post('/guess') do
       :past_results => past_results,
       :start_time => game['start_time'],
       :end_time => Time.now,
+      :time_taken => game['start_time'] - Time.now,
       :solved => 'true'
     })
 
@@ -97,6 +99,7 @@ post('/guess') do
       :past_guesses => past_guesses,
       :past_results => past_results,
       :guess => player_guess,
+      :time_taken => game['time_taken'],
       :result => "You win!"
     }.to_json
   end
