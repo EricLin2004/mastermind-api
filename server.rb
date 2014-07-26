@@ -55,10 +55,7 @@ post('/guess') do
   game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
 
-  p game
-  p game[:solved]
-
-  if game[:solved] == true
+  if game['solved'] == true
     return {
       :user => game['user'],
       :game_key => game_key,
