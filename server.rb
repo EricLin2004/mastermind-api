@@ -102,7 +102,7 @@ post('/guess') do
       :past_guesses => past_guesses,
       :past_results => past_results,
       :guess => player_guess,
-      :time_taken => game['time_taken'],
+      :time_taken => time_taken,
       :result => "You win!"
     }.to_json
   end
