@@ -1,13 +1,4 @@
 class Code
-  COLOR_DICT = {
-    0 => 'R',
-    1 => 'B',
-    2 => 'G',
-    3 => 'Y',
-    4 => 'P',
-    5 => 'O'
-  }
-
   def initialize(answer_code="RBGY")
     @answer_code = answer_code
   end
@@ -24,8 +15,8 @@ class Code
   end
 
   def self.sanitize(code)
-    if code.scan(/[012345rgbypoRGBYPO]+/).join('').length == 4
-      return code.scan(/[012345rgbypoRGBY]+/).join('').upcase
+    if code.scan(/[rgbypoRGBYPO]+/).join('').length == 4
+      return code.scan(/[rgbypoRGBY]+/).join('').upcase
     end
     false
   end
@@ -84,24 +75,6 @@ class Game
     else
       @answer = Code.new(answer)
     end
-  end
-
-  def play
-    MAX_TURNS.times do
-      new_guess = get_guess
-      display_matches(new_guess)
-      if win?(new_guess)
-        puts "You win!"
-        return
-      end
-    end
-
-    puts "You lose, the answer was #{@answer.code}!"
-  end
-
-  def get_guess
-    puts "What's your guess?"
-    gets.chomp
   end
 
   def display_matches(guess)
