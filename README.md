@@ -7,9 +7,19 @@ This API is currently deployed on heroku: http://eric-mastermind.herokuapp.com/
 
 There are only two endpoints for this api:
 
+=========================
 `POST /new_game`
 
-This endpoint requires you to post with a `user` field. The response will be:
+This endpoint requires you to post with a `user` field.
+
+Params:
+```json
+{
+    "user: "Eric"
+}
+```
+
+Response
 ```json
 {
     "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
@@ -20,9 +30,20 @@ This endpoint requires you to post with a `user` field. The response will be:
 ```
 Every subsequent post request will require you to supply the `game_key` field.
 
+=======================
 `POST /guess`
 
-This endpoint requires you to post with the `game_key` and a `code` consisting of 4 letters of RBGYOP (corresponding to Red, Blue, Green, Yellow, Orange, Purple). The response will be:
+This endpoint requires you to post with the `game_key` and a `code` consisting of 4 letters of RBGYOP (corresponding to Red, Blue, Green, Yellow, Orange, Purple).
+
+Params:
+```json
+{
+    "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
+    "code": "BBBB"
+}
+```
+
+Response:
 ```json
 {
     "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
