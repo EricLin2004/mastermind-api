@@ -24,7 +24,7 @@ Params:
 Response
 ```json
 {
-    "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
+    "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 0,
     "past_guesses": [],
     "past_results": []
@@ -40,7 +40,7 @@ This endpoint requires you to post with the `game_key` and a `code` consisting o
 Params:
 ```json
 {
-    "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
+    "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "code": "BBBB"
 }
 ```
@@ -48,22 +48,22 @@ Params:
 Response:
 ```json
 {
-    "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
+    "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 1,
     "past_guesses": [
-        "BBBB"
+        "RPRY"
     ],
     "past_results": [
-        [
-            0,
-            0
-        ]
+        {
+            "exact": 2,
+            "near": 1
+        }
     ],
-    "guess": "BBBB",
-    "result": [
-        "You got 0 exact!",
-        "You got 0 near!"
-    ]
+    "guess": "RPRY",
+    "result": {
+        "exact": 2,
+        "near": 1
+    }
 }
 ```
 
@@ -71,24 +71,24 @@ Once you guess the correct code you will receive the time it took for you to com
 ```json
 {
     "user": "Eric",
-    "game_key": "EryrN7000jMs750vYWKagKm11tkHgtHELdYBAKDt-VaKpKWz4KL-Uu7r0X8HQRWpDvw",
+    "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 2,
     "past_guesses": [
-        "BBBB",
-        "GGYO"
+        "RPRY",
+        "RPYG"
     ],
     "past_results": [
-        [
-            0,
-            0
-        ],
-        [
-            4,
-            0
-        ]
+        {
+            "exact": 2,
+            "near": 1
+        },
+        {
+            "exact": 4,
+            "near": 0
+        }
     ],
-    "guess": "GGYO",
-    "time_taken": 254.448826034,
+    "guess": "RPYG",
+    "time_taken": 191.069655158,
     "result": "You win!"
 }
 ```
