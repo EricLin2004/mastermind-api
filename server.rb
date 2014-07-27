@@ -76,7 +76,7 @@ post('/guess') do
   game_object = Game.new(answer_code)
 
   result = game_object.display_matches(player_guess)
-  past_results = game['past_results'] << result
+  past_results = game['past_results'] << { :exact => result[0], :near => result[1] }
 
   if game_object.win?(player_guess)
     time_taken = Time.now - game['start_time']
@@ -123,6 +123,9 @@ post('/guess') do
     :past_guesses => past_guesses,
     :past_results => past_results,
     :guess => player_guess,
-    :result => ["You got #{result[0]} exact!","You got #{result[1]} near!"]
+    :result => {
+      :exact => result[0],
+      :near => result[1]
+    }
   }.to_json
 end
