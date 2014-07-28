@@ -27,6 +27,7 @@ post('/new_game') do
     :num_guesses => 0,
     :answer_code => new_code,
     :start_time => Time.now,
+    :solved => 'false',
     :past_guesses => [],
     :past_results => []
   })
@@ -34,6 +35,7 @@ post('/new_game') do
   return {
     :game_key => new_game_key,
     :num_guesses => 0,
+    :solved => 'false'
     :past_guesses => [],
     :past_results => []
   }.to_json
@@ -65,6 +67,7 @@ post('/guess') do
       :start_time => game['start_time'],
       :end_time => game['end_time'],
       :time_taken => game['time_taken'],
+      :solved => 'true',
       :result => "This game has already been solved."
     }.to_json
   end
@@ -81,7 +84,6 @@ post('/guess') do
   if game_object.win?(player_guess)
     time_taken = Time.now - game['start_time']
 
-    puts time_taken
     collection.update({ 'game_key' => game_key }, {
       :user => game['user'],
       :game_key => game_key,
@@ -103,6 +105,7 @@ post('/guess') do
       :past_results => past_results,
       :guess => player_guess,
       :time_taken => time_taken,
+      :solved => 'true',
       :result => "You win!"
     }.to_json
   end
@@ -114,6 +117,7 @@ post('/guess') do
     :num_guesses => num_guesses,
     :past_guesses => past_guesses,
     :start_time => game['start_time'],
+    :solved => 'false',
     :past_results => past_results
   })
 
@@ -123,6 +127,7 @@ post('/guess') do
     :past_guesses => past_guesses,
     :past_results => past_results,
     :guess => player_guess,
+    :solved => 'false',
     :result => {
       :exact => result[0],
       :near => result[1]
