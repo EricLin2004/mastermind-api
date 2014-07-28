@@ -49,7 +49,7 @@ post('/guess') do
   player_guess = Code.sanitize(params['code'])
 
   unless params['code'] && player_guess
-    return { :error => "Invalid code submission. Please post with code parameter consisting of 4 letters of RBGYOP" }.to_json
+    return { :error => "Invalid code submission. Please post with code parameter consisting of 5 letters of RBGYOP" }.to_json
   end
 
   game_key = params['game_key']
