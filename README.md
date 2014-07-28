@@ -41,7 +41,7 @@ Params:
 ```json
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
-    "code": "BBBB"
+    "code": "RPRY"
 }
 ```
 
