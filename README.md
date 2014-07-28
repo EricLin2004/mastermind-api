@@ -27,6 +27,7 @@ Response
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 0,
+    :solved => 'false',
     "past_guesses": [],
     "past_results": []
 }
@@ -60,6 +61,7 @@ Response:
             "near": 1
         }
     ],
+    :solved => 'false',
     "guess": "RPYGO",
     "result": {
         "exact": 0,
@@ -88,6 +90,7 @@ Once you guess the correct code you will receive the time it took for you to com
             "near": 0
         }
     ],
+    :solved => 'true',
     "guess": "POGPY",
     "time_taken": 64.75358,
     "result": "You win!"
