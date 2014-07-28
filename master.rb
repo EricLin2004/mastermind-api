@@ -4,10 +4,7 @@ class Code
   end
 
   def self.random
-    colors = []
-    4.times do
-      colors << ['R','B','G','Y','P','O'].sample
-    end
+    colors = ['R','B','G','Y','P','O'].sample(3) + ['R','B','G','Y','P','O'].sample(1)
     # for i in 0..3
     #   colors << ['R','B','G','Y'].sample
     # end
