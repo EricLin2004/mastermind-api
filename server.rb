@@ -35,7 +35,7 @@ post('/new_game') do
   return {
     :game_key => new_game_key,
     :num_guesses => 0,
-    :solved => 'false'
+    :solved => 'false',
     :past_guesses => [],
     :past_results => []
   }.to_json
