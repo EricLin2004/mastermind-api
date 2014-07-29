@@ -11,6 +11,14 @@ conn = MongoClient.new
 db = conn['eric-mastermind']
 collection = db['games']
 
+# Format post params when content_type is application/json or text/plain.
+before do
+  unless request.content_type == "application/x-www-form-urlencoded"
+    request.body.rewind
+    params.merge!(JSON.parse(request.body.read))
+  end
+end
+
 post('/new_game') do
   content_type :json
 
@@ -54,6 +62,10 @@ post('/guess') do
 
   game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
+
+  unless game
+    return { :error => "Could not find game corresponding to provided game_key!" }.to_json
+  end
 
   if game['solved'] == 'true'
     return {
