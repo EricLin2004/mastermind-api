@@ -28,7 +28,6 @@ post('/new_game') do
     :answer_code => new_code,
     :start_time => Time.now,
     :solved => 'false',
-    :past_guesses => [],
     :past_results => []
   })
 
@@ -36,7 +35,6 @@ post('/new_game') do
     :game_key => new_game_key,
     :num_guesses => 0,
     :solved => 'false',
-    :past_guesses => [],
     :past_results => []
   }.to_json
 end
@@ -62,7 +60,6 @@ post('/guess') do
       :user => game['user'],
       :game_key => game_key,
       :num_guesses => game['num_guesses'],
-      :past_guesses => game['past_guesses'],
       :past_results => game['past_results'],
       :start_time => game['start_time'],
       :end_time => game['end_time'],
@@ -72,14 +69,13 @@ post('/guess') do
     }.to_json
   end
 
-  past_guesses = game['past_guesses'] << player_guess
   num_guesses = game['num_guesses'] + 1
   answer_code = game['answer_code']
 
   game_object = Game.new(answer_code)
 
   result = game_object.display_matches(player_guess)
-  past_results = game['past_results'] << { :exact => result[0], :near => result[1] }
+  past_results = game['past_results'] << { :guess => player_guess, :exact => result[0], :near => result[1] }
 
   if game_object.win?(player_guess)
     time_taken = Time.now - game['start_time']
@@ -89,7 +85,6 @@ post('/guess') do
       :game_key => game_key,
       :answer_code => answer_code,
       :num_guesses => num_guesses,
-      :past_guesses => past_guesses,
       :past_results => past_results,
       :start_time => game['start_time'],
       :end_time => Time.now,
@@ -101,7 +96,6 @@ post('/guess') do
       :user => game['user'],
       :game_key => game_key,
       :num_guesses => num_guesses,
-      :past_guesses => past_guesses,
       :past_results => past_results,
       :guess => player_guess,
       :time_taken => time_taken,
@@ -115,7 +109,6 @@ post('/guess') do
     :game_key => game_key,
     :answer_code => answer_code,
     :num_guesses => num_guesses,
-    :past_guesses => past_guesses,
     :start_time => game['start_time'],
     :solved => 'false',
     :past_results => past_results
@@ -124,7 +117,6 @@ post('/guess') do
   return {
     :game_key => game_key,
     :num_guesses => num_guesses,
-    :past_guesses => past_guesses,
     :past_results => past_results,
     :guess => player_guess,
     :solved => 'false',
