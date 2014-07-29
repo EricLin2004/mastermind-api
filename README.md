@@ -28,7 +28,6 @@ Response
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 0,
     "solved": "false",
-    "past_guesses": [],
     "past_results": []
 }
 ```
@@ -52,11 +51,9 @@ Response:
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 1,
-    "past_guesses": [
-        "RPYGO"
-    ],
     "past_results": [
         {
+            "guess": "RPYGO",
             "exact": 2,
             "near": 1
         }
@@ -76,16 +73,14 @@ Once you guess the correct code you will receive the time it took for you to com
     "user": "Eric",
     "game_key": "jwrcZhiOn9Un6hBm0HnJqol8xpAGjznpGJ5A78EMqoxj-nG5vMouEJN58-l-CU0wP4M",
     "num_guesses": 2,
-    "past_guesses": [
-        "RPYGO",
-        "POGPY"
-    ],
     "past_results": [
         {
+            "guess": "RPYGO",
             "exact": 0,
             "near": 4
         },
         {
+            "guess": "POGPY",
             "exact": 5,
             "near": 0
         }
