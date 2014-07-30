@@ -1,6 +1,6 @@
 class Code
-  COLORS = ['R','B','G','Y','P','O']
-  NUM_PEGS = 5
+  COLORS = ['R','B','G','Y','P','O','C','M']
+  NUM_PEGS = 8
 
   def initialize(answer_code="RBGY")
     @answer_code = answer_code
@@ -15,7 +15,7 @@ class Code
   end
 
   def self.random
-    colors = COLORS.sample(3) + COLORS.sample(2)
+    colors = (COLORS.sample(3) + COLORS.sample(3) + COLORS.sample(2)).shuffle
     # for i in 0..3
     #   colors << ['R','B','G','Y'].sample
     # end
