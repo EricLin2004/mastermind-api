@@ -2,7 +2,7 @@ mastermind-api
 ==============
 The rules of Mastermind: http://en.wikipedia.org/wiki/Mastermind_(board_game)
  
-This api uses 6 colors (RBGYOP) and 5 positions to guess.
+This api uses 8 colors (RBGYOPCM) and 8 positions to guess.
 
 This API is currently deployed on heroku: http://eric-mastermind.herokuapp.com/
 
@@ -27,8 +27,8 @@ Response
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 0,
-    "colors": ["R","B","G","Y","O","P"],
-    "code_length": 5,
+    "colors": ["R","B","G","Y","O","P","C","M"],
+    "code_length": 8,
     "solved": "false",
     "past_results": []
 }
@@ -44,7 +44,7 @@ Params:
 ```json
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
-    "code": "RPYGO"
+    "code": "RPYGOGOP"
 }
 ```
 
@@ -53,17 +53,17 @@ Response:
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 1,
-    "colors": ["R","B","G","Y","O","P"],
+    "colors": ["R","B","G","Y","O","P","C","M"],
     "code_length": 5,
     "past_results": [
         {
-            "guess": "RPYGO",
+            "guess": "RPYGOGOP",
             "exact": 2,
             "near": 1
         }
     ],
     "solved": "false",
-    "guess": "RPYGO",
+    "guess": "RPYGOGOP",
     "result": {
         "exact": 0,
         "near": 4
@@ -77,22 +77,22 @@ Once you guess the correct code you will receive the time it took for you to com
     "user": "Eric",
     "game_key": "jwrcZhiOn9Un6hBm0HnJqol8xpAGjznpGJ5A78EMqoxj-nG5vMouEJN58-l-CU0wP4M",
     "num_guesses": 2,
-    "colors": ["R","B","G","Y","O","P"],
+    "colors": ["R","B","G","Y","O","P","C","M"],
     "code_length": 5,
     "past_results": [
         {
-            "guess": "RPYGO",
+            "guess": "RPYGOGOP",
             "exact": 0,
             "near": 4
         },
         {
-            "guess": "POGPY",
-            "exact": 5,
+            "guess": "POGPYCMO",
+            "exact": 8,
             "near": 0
         }
     ],
     "solved": "true",
-    "guess": "POGPY",
+    "guess": "POGPYCMO",
     "time_taken": 64.75358,
     "result": "You win!"
 }
