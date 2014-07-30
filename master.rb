@@ -23,8 +23,8 @@ class Code
   end
 
   def self.sanitize(code)
-    if code.scan(/[rgbypoRGBYPO]+/).join('').length == NUM_PEGS
-      return code.scan(/[rgbypoRGBYPO]+/).join('').upcase
+    if code.scan(/[rgbypocmRGBYPOCM]+/).join('').length == NUM_PEGS
+      return code.scan(/[rgbypocmRGBYPOCM]+/).join('').upcase
     end
     false
   end
