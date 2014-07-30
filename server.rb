@@ -26,6 +26,7 @@ post('/new_game') do
   new_code = Game.new.answer.code
 
   unless params['user']
+    status 400
     return { :error => "Please provide a user parameter in your post request" }.to_json
   end
 
@@ -36,6 +37,8 @@ post('/new_game') do
     :answer_code => new_code,
     :start_time => Time.now,
     :solved => 'false',
+    :colors => Code.colors,
+    :code_length => Code.num_pegs,
     :past_results => []
   })
 
@@ -43,6 +46,8 @@ post('/new_game') do
     :game_key => new_game_key,
     :num_guesses => 0,
     :solved => 'false',
+    :colors => Code.colors,
+    :code_length => Code.num_pegs,
     :past_results => []
   }.to_json
 end
@@ -51,12 +56,14 @@ post('/guess') do
   content_type :json
 
   unless params['game_key']
+    status 400
     return { :error => "Could not find game key. Please post with proper key!" }.to_json
   end
 
   player_guess = Code.sanitize(params['code'])
 
   unless params['code'] && player_guess
+    status 400
     return { :error => "Invalid code submission. Please post with code parameter consisting of 5 letters of RBGYOP" }.to_json
   end
 
@@ -64,6 +71,7 @@ post('/guess') do
   game = collection.find({ 'game_key' => game_key }).first()
 
   unless game
+    status 400
     return { :error => "Could not find game corresponding to provided game_key!" }.to_json
   end
 
@@ -77,6 +85,8 @@ post('/guess') do
       :end_time => game['end_time'],
       :time_taken => game['time_taken'],
       :solved => 'true',
+      :colors => Code.colors,
+      :code_length => Code.num_pegs,
       :result => "This game has already been solved."
     }.to_json
   end
@@ -101,6 +111,8 @@ post('/guess') do
       :start_time => game['start_time'],
       :end_time => Time.now,
       :time_taken => time_taken,
+      :colors => Code.colors,
+      :code_length => Code.num_pegs,
       :solved => 'true'
     })
 
@@ -112,6 +124,8 @@ post('/guess') do
       :guess => player_guess,
       :time_taken => time_taken,
       :solved => 'true',
+      :colors => Code.colors,
+      :code_length => Code.num_pegs,
       :result => "You win!"
     }.to_json
   end
@@ -123,6 +137,8 @@ post('/guess') do
     :num_guesses => num_guesses,
     :start_time => game['start_time'],
     :solved => 'false',
+    :colors => Code.colors,
+    :code_length => Code.num_pegs,
     :past_results => past_results
   })
 
@@ -132,6 +148,8 @@ post('/guess') do
     :past_results => past_results,
     :guess => player_guess,
     :solved => 'false',
+    :colors => Code.colors,
+    :code_length => Code.num_pegs,
     :result => {
       :exact => result[0],
       :near => result[1]

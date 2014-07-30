@@ -1,10 +1,21 @@
 class Code
+  COLORS = ['R','B','G','Y','P','O']
+  NUM_PEGS = 5
+
   def initialize(answer_code="RBGY")
     @answer_code = answer_code
   end
 
+  def self.colors
+    COLORS
+  end
+
+  def self.num_pegs
+    NUM_PEGS
+  end
+
   def self.random
-    colors = ['R','B','G','Y','P','O'].sample(3) + ['R','B','G','Y','P','O'].sample(2)
+    colors = COLORS.sample(3) + COLORS.sample(2)
     # for i in 0..3
     #   colors << ['R','B','G','Y'].sample
     # end
@@ -12,7 +23,7 @@ class Code
   end
 
   def self.sanitize(code)
-    if code.scan(/[rgbypoRGBYPO]+/).join('').length == 5
+    if code.scan(/[rgbypoRGBYPO]+/).join('').length == NUM_PEGS
       return code.scan(/[rgbypoRGBYPO]+/).join('').upcase
     end
     false
@@ -82,6 +93,6 @@ class Game
   end
 
   def win?(guess)
-    @answer.exact_matches(guess) == 5
+    @answer.exact_matches(guess) == Code.num_pegs
   end
 end
