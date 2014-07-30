@@ -13,10 +13,10 @@ collection = db['games']
 
 # Format post params when content_type is application/json or text/plain.
 before do
-  unless request.content_type == "application/x-www-form-urlencoded"
-    request.body.rewind
-    params.merge!(JSON.parse(request.body.read))
-  end
+  # unless request.content_type == "application/x-www-form-urlencoded"
+  #   request.body.rewind
+  #   params.merge!(JSON.parse(request.body.read))
+  # end
 end
 
 post('/new_game') do
