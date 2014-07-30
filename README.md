@@ -27,6 +27,8 @@ Response
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 0,
+    "colors": ["R","B","G","Y","O","P"],
+    "code_length": 5,
     "solved": "false",
     "past_results": []
 }
@@ -51,6 +53,8 @@ Response:
 {
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 1,
+    "colors": ["R","B","G","Y","O","P"],
+    "code_length": 5,
     "past_results": [
         {
             "guess": "RPYGO",
@@ -73,6 +77,8 @@ Once you guess the correct code you will receive the time it took for you to com
     "user": "Eric",
     "game_key": "jwrcZhiOn9Un6hBm0HnJqol8xpAGjznpGJ5A78EMqoxj-nG5vMouEJN58-l-CU0wP4M",
     "num_guesses": 2,
+    "colors": ["R","B","G","Y","O","P"],
+    "code_length": 5,
     "past_results": [
         {
             "guess": "RPYGO",
