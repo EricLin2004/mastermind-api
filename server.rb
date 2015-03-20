@@ -59,10 +59,13 @@ post('/guess') do
   content_type :json
   game_key = params['game_key']
 
-  if MONGO_LOCK[game_key]
-    status 400
-    body "Processing last guess, please wait a moment for it to complete."
-    return
+  # if MONGO_LOCK[game_key]
+  #   status 400
+  #   body "Processing last guess, please wait a moment for it to complete."
+  #   return
+  # end
+  while MONGO_LOCK[game_key]
+    sleep 0.5
   end
 
   MONGO_LOCK[game_key] = true
@@ -84,6 +87,20 @@ post('/guess') do
   end
 
   game = collection.find({ 'game_key' => game_key }).first()
+  if (Time.now - game['start_time']) > 60*30 # 30 minute time limit.
+    MONGO_LOCK.delete(game_key)
+    return {
+      :user => game['user'],
+      :game_key => game_key,
+      :num_guesses => game['num_guesses'],
+      :past_results => game['past_results'],
+      :start_time => game['start_time'],
+      :solved => 'false',
+      :colors => Code.colors,
+      :code_length => Code.num_pegs,
+      :result => "This game has expired (30 minute window). Please start a new game."
+    }.to_json
+  end
 
   unless game
     status 400
