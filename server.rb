@@ -93,7 +93,7 @@ post('/guess') do
   end
 
   if game['solved'] == 'true'
-    MONGO_LOCK[game_key] = false
+    MONGO_LOCK.delete(game_key)
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -146,7 +146,7 @@ post('/guess') do
       :solved => 'true'
     })
 
-    MONGO_LOCK[game_key] = false
+    MONGO_LOCK.delete(game_key)
     return {
       :user => game['user'],
       :game_key => game_key,
