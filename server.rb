@@ -99,16 +99,19 @@ post('/guess') do
   result = game_object.display_matches(player_guess)
   past_results = game['past_results'] << { :guess => player_guess, :exact => result[0], :near => result[1] }
 
-  collection.find_and_modify({ 'game_key' => game_key }, {
-    :user => game['user'],
-    :game_key => game_key,
-    :answer_code => answer_code,
-    :num_guesses => num_guesses,
-    :start_time => game['start_time'],
-    :solved => 'false',
-    :colors => Code.colors,
-    :code_length => Code.num_pegs,
-    :past_results => past_results
+  collection.find_and_modify({
+    query: { 'game_key' => game_key },
+    update: {
+      :user => game['user'],
+      :game_key => game_key,
+      :answer_code => answer_code,
+      :num_guesses => num_guesses,
+      :start_time => game['start_time'],
+      :solved => 'false',
+      :colors => Code.colors,
+      :code_length => Code.num_pegs,
+      :past_results => past_results
+    }
   })
 
   if game_object.win?(player_guess)
