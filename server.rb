@@ -99,7 +99,7 @@ post('/guess') do
   result = game_object.display_matches(player_guess)
   past_results = game['past_results'] << { :guess => player_guess, :exact => result[0], :near => result[1] }
 
-  collection.update({ 'game_key' => game_key }, {
+  collection.find_and_modify({ 'game_key' => game_key }, {
     :user => game['user'],
     :game_key => game_key,
     :answer_code => answer_code,
