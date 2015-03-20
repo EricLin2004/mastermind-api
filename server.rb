@@ -57,8 +57,16 @@ end
 post('/guess') do
   content_type :json
 
+  if MONGO_LOCK[params['game_key']]
+    status 400
+    return { :error => "Processing last guess, please wait a moment for it to complete."}
+  end
+
+  MONGO_LOCK[params['game_key']] = true
+
   unless params['game_key']
     status 400
+    MONGO_LOCK[params['game_key']] = false
     return { :error => "Could not find game key. Please post with proper key!" }.to_json
   end
 
@@ -66,26 +74,22 @@ post('/guess') do
 
   unless params['code'] && player_guess
     status 400
+    MONGO_LOCK[params['game_key']] = false
     return { :error => "Invalid code submission. Please post with code parameter consisting of 8 letters of RBGYOPCM" }.to_json
-  end
-
-  if MONGO_LOCK[game_key]
-    status 400
-    return { :error => "Previous guess still being processed. Please wait for it to complete." }
   end
 
   game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
-  MONGO_LOCK[game_key] = true;
 
   unless game
     status 400
+    MONGO_LOCK[params['game_key']] = false
     return { :error => "Could not find game corresponding to provided game_key!" }.to_json
   end
 
   if game['solved'] == 'true'
 
-    MONGO_LOCK[game_key] = false;
+    MONGO_LOCK[params['game_key']] = false
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -140,7 +144,7 @@ post('/guess') do
       :solved => 'true'
     })
 
-    MONGO_LOCK[game_key] = false;
+    MONGO_LOCK[params['game_key']] = false
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -155,7 +159,7 @@ post('/guess') do
     }.to_json
   end
 
-  MONGO_LOCK[game_key] = false;
+  MONGO_LOCK[params['game_key']] = false
   return {
     :game_key => game_key,
     :num_guesses => num_guesses,
