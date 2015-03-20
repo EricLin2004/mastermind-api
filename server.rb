@@ -7,6 +7,8 @@ require './master.rb'
 
 include Mongo
 
+MONGO_LOCK = {};
+
 conn = MongoClient.new
 db = conn['eric-mastermind']
 collection = db['games']
@@ -67,8 +69,14 @@ post('/guess') do
     return { :error => "Invalid code submission. Please post with code parameter consisting of 8 letters of RBGYOPCM" }.to_json
   end
 
+  if MONGO_LOCK[game_key]
+    status 400
+    return { :error => "Previous guess still being processed. Please wait for it to complete." }
+  end
+
   game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
+  MONGO_LOCK[game_key] = true;
 
   unless game
     status 400
@@ -76,6 +84,8 @@ post('/guess') do
   end
 
   if game['solved'] == 'true'
+
+    MONGO_LOCK[game_key] = false;
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -91,7 +101,6 @@ post('/guess') do
     }.to_json
   end
 
-  num_guesses = game['num_guesses'] + 1
   answer_code = game['answer_code']
 
   game_object = Game.new(answer_code)
@@ -105,7 +114,7 @@ post('/guess') do
       :user => game['user'],
       :game_key => game_key,
       :answer_code => answer_code,
-      :num_guesses => num_guesses,
+      :num_guesses => game['num_guesses'] + 1,
       :start_time => game['start_time'],
       :solved => 'false',
       :colors => Code.colors,
@@ -131,6 +140,7 @@ post('/guess') do
       :solved => 'true'
     })
 
+    MONGO_LOCK[game_key] = false;
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -145,6 +155,7 @@ post('/guess') do
     }.to_json
   end
 
+  MONGO_LOCK[game_key] = false;
   return {
     :game_key => game_key,
     :num_guesses => num_guesses,
