@@ -29,7 +29,8 @@ post('/new_game') do
 
   unless params['user']
     status 400
-    return { :error => "Please provide a user parameter in your post request" }.to_json
+    body "Please provide a user parameter in your post request"
+    return
   end
 
   collection.insert({
@@ -56,40 +57,43 @@ end
 
 post('/guess') do
   content_type :json
+  game_key = params['game_key']
 
-  if MONGO_LOCK[params['game_key']]
+  if MONGO_LOCK[game_key]
     status 400
-    return { :error => "Processing last guess, please wait a moment for it to complete."}
+    body "Processing last guess, please wait a moment for it to complete."
+    return
   end
 
-  MONGO_LOCK[params['game_key']] = true
+  MONGO_LOCK[game_key] = true
 
-  unless params['game_key']
+  unless game_key
     status 400
-    MONGO_LOCK[params['game_key']] = false
-    return { :error => "Could not find game key. Please post with proper key!" }.to_json
+    MONGO_LOCK[game_key] = false
+    body "Could not find game key. Please post with proper key!"
+    return
   end
 
   player_guess = Code.sanitize(params['code'])
 
   unless params['code'] && player_guess
     status 400
-    MONGO_LOCK[params['game_key']] = false
-    return { :error => "Invalid code submission. Please post with code parameter consisting of 8 letters of RBGYOPCM" }.to_json
+    MONGO_LOCK[game_key] = false
+    body "Invalid code submission. Please post with code parameter consisting of 8 letters of RBGYOPCM"
+    return
   end
 
-  game_key = params['game_key']
   game = collection.find({ 'game_key' => game_key }).first()
 
   unless game
     status 400
-    MONGO_LOCK[params['game_key']] = false
-    return { :error => "Could not find game corresponding to provided game_key!" }.to_json
+    MONGO_LOCK[game_key] = false
+    body "Could not find game corresponding to provided game_key!"
+    return
   end
 
   if game['solved'] == 'true'
-
-    MONGO_LOCK[params['game_key']] = false
+    MONGO_LOCK[game_key] = false
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -106,9 +110,7 @@ post('/guess') do
   end
 
   answer_code = game['answer_code']
-
   game_object = Game.new(answer_code)
-
   result = game_object.display_matches(player_guess)
   past_results = game['past_results'] << { :guess => player_guess, :exact => result[0], :near => result[1] }
 
@@ -134,7 +136,7 @@ post('/guess') do
       :user => game['user'],
       :game_key => game_key,
       :answer_code => answer_code,
-      :num_guesses => num_guesses,
+      :num_guesses => game['num_guesses'],
       :past_results => past_results,
       :start_time => game['start_time'],
       :end_time => Time.now,
@@ -144,11 +146,11 @@ post('/guess') do
       :solved => 'true'
     })
 
-    MONGO_LOCK[params['game_key']] = false
+    MONGO_LOCK[game_key] = false
     return {
       :user => game['user'],
       :game_key => game_key,
-      :num_guesses => num_guesses,
+      :num_guesses => game['num_guesses'],
       :past_results => past_results,
       :guess => player_guess,
       :time_taken => time_taken,
@@ -159,10 +161,10 @@ post('/guess') do
     }.to_json
   end
 
-  MONGO_LOCK[params['game_key']] = false
+  MONGO_LOCK[game_key] = false
   return {
     :game_key => game_key,
-    :num_guesses => num_guesses,
+    :num_guesses => game['num_guesses'],
     :past_results => past_results,
     :guess => player_guess,
     :solved => 'false',
