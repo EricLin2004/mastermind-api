@@ -9,6 +9,11 @@ include Mongo
 
 MONGO_LOCK = {};
 
+# Arbitrary score calculation
+# def calculate_score(guesses, time)
+#   return guesses*10 + time < 300
+# end
+
 conn = Mongo::Client.new('mongodb://az-mastermind:2ZrfdqYdzc6UTMioxpZxKuovExJ@ds059888.mongolab.com:59888/heroku_dwbnqjb5')
 collection = conn[:games]
 
@@ -110,6 +115,7 @@ post('/guess') do
 
   if game['solved'] == 'true'
     MONGO_LOCK.delete(game_key)
+
     return {
       :user => game['user'],
       :game_key => game_key,
@@ -121,7 +127,8 @@ post('/guess') do
       :solved => 'true',
       :colors => Code.colors,
       :code_length => Code.num_pegs,
-      :result => "This game has already been solved."
+      :result => "This game has already been solved.",
+      :further_instructions => "Awesome work! Looking for a job or just want to say hi? Email your solution to codechallenge@axiomzen.co and we'll get in touch with you."
     }.to_json
   end
 
@@ -172,7 +179,8 @@ post('/guess') do
       :solved => 'true',
       :colors => Code.colors,
       :code_length => Code.num_pegs,
-      :result => "You win!"
+      :result => "You win!",
+      :further_instructions => "Awesome work! Looking for a job or just want to say hi? Email your solution to codechallenge@axiomzen.co and we'll get in touch with you."
     }.to_json
   end
 
