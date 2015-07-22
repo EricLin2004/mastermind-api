@@ -9,9 +9,8 @@ include Mongo
 
 MONGO_LOCK = {};
 
-conn = MongoClient.new
-db = conn['eric-mastermind']
-collection = db['games']
+conn = Mongo::Client.new('mongodb://az-mastermind:2ZrfdqYdzc6UTMioxpZxKuovExJ@ds059888.mongolab.com:59888/heroku_dwbnqjb5')
+collection = conn[:games]
 
 # Format post params when content_type is application/json or text/plain.
 before do
@@ -38,7 +37,7 @@ post('/new_game') do
     return
   end
 
-  collection.insert({
+  collection.insert_one({
     :user => params[:user],
     :game_key => new_game_key,
     :num_guesses => 0,
@@ -131,9 +130,8 @@ post('/guess') do
   result = game_object.display_matches(player_guess)
   past_results = game['past_results'] << { :guess => player_guess, :exact => result[0], :near => result[1] }
 
-  collection.find_and_modify({
-    query: { 'game_key' => game_key },
-    update: {
+  collection.find(:game_key => game_key).find_one_and_update({
+    '$set': {
       :user => game['user'],
       :game_key => game_key,
       :answer_code => answer_code,
@@ -149,7 +147,7 @@ post('/guess') do
   if game_object.win?(player_guess)
     time_taken = Time.now - game['start_time']
 
-    collection.update({ 'game_key' => game_key }, {
+    collection.find(:game_key => game_key).update_one({
       :user => game['user'],
       :game_key => game_key,
       :answer_code => answer_code,
