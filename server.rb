@@ -21,6 +21,11 @@ before do
   end
 end
 
+get('/') do
+  content_type :json
+  { :ping => "pong" }.to_json
+end
+
 post('/new_game') do
   content_type :json
 
@@ -59,11 +64,6 @@ post('/guess') do
   content_type :json
   game_key = params['game_key']
 
-  # if MONGO_LOCK[game_key]
-  #   status 400
-  #   body "Processing last guess, please wait a moment for it to complete."
-  #   return
-  # end
   while MONGO_LOCK[game_key]
     sleep 0.5
   end
