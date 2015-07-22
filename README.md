@@ -6,7 +6,7 @@ This api uses 8 colors (RBGYOPCM) and 8 positions to guess.
 
 This API is currently deployed on heroku: http://eric-mastermind.herokuapp.com/
 
-The goal of this is to write an algorithm to get to the solution while interacting with the API. If this challenge is difficult (but not too difficult) we can post this on our AxiomZen website for the public to try out. Difficulty can be raised by increasing number of colors to choose from (currently 6 colors) or increasing number of spots to fill (currently set to 5)
+The goal of this is to write an algorithm to get to the solution while interacting with the API. If this challenge is difficult (but not too difficult) we can post this on our AxiomZen website for the public to try out. Difficulty can be raised by increasing number of colors to choose from (currently 8 colors) or increasing number of spots to fill (currently set to 8)
 
 There are only two endpoints for this api:
 
@@ -54,7 +54,7 @@ Response:
     "game_key": "niBpjqhujvM9NR0CQrB6e_xJXXWNNRLgfwYu8YPI3wpn4JdXs3ufRzOAv3SEC_0BNSw",
     "num_guesses": 1,
     "colors": ["R","B","G","Y","O","P","C","M"],
-    "code_length": 5,
+    "code_length": 8,
     "past_results": [
         {
             "guess": "RPYGOGOP",
@@ -78,7 +78,7 @@ Once you guess the correct code you will receive the time it took for you to com
     "game_key": "jwrcZhiOn9Un6hBm0HnJqol8xpAGjznpGJ5A78EMqoxj-nG5vMouEJN58-l-CU0wP4M",
     "num_guesses": 2,
     "colors": ["R","B","G","Y","O","P","C","M"],
-    "code_length": 5,
+    "code_length": 8,
     "past_results": [
         {
             "guess": "RPYGOGOP",
