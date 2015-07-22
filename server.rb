@@ -131,7 +131,7 @@ post('/guess') do
   past_results = game['past_results'] << { :guess => player_guess, :exact => result[0], :near => result[1] }
 
   collection.find(:game_key => game_key).find_one_and_update({
-    '$set': {
+    '$set' => {
       :user => game['user'],
       :game_key => game_key,
       :answer_code => answer_code,
