@@ -1,5 +1,4 @@
 require 'sinatra'
-require 'sinatra/cross_origin'
 require 'json'
 require 'securerandom'
 require 'mongo'
@@ -18,12 +17,10 @@ MONGO_LOCK = {};
 conn = Mongo::Client.new('mongodb://az-mastermind:2ZrfdqYdzc6UTMioxpZxKuovExJ@ds059888.mongolab.com:59888/heroku_dwbnqjb5')
 collection = conn[:games]
 
-configure do
-  enable :cross_origin
-end
-
 # Format post params when content_type is application/json or text/plain.
 before do
+  headers 'Access-Control-Allow-Origin' => '*'
+
   if request.content_type == "application/json"
     request.body.rewind
     params.merge!(JSON.parse(request.body.read))
