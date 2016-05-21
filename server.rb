@@ -27,6 +27,11 @@ before do
   end
 end
 
+options('/*') do
+  status 200
+  return
+end
+
 get('/') do
   content_type :json
   { :ping => "pong" }.to_json
